@@ -36,16 +36,6 @@ class gmbApi:
 			credentials = tools.run_flow(flow, storage, flags)	
 		http = credentials.authorize(httplib2.Http())
 		self.api = build(API_NAME, API_VERSION, http=http, discoveryServiceUrl=DISCOVERY_URI)
-	def serviceWorkerInit(self):
-		#init API as service worker - not currently working
-		jsonLocation = 'gmbapi.json'
-		scope = ['https://www.googleapis.com/auth/business.manage']
-
-		DISCOVERY_URI = 'https://developers.google.com/my-business/samples/{api}_google_rest_{apiVersion}.json'
-		credentials = service_account.Credentials.from_service_account_file(jsonLocation, scopes = scope, subject = 'example@internet.com')
-		delegated_credentials = credentials.with_subject('example@internet.com')
-
-		self.api = discovery.build('mybusiness','v4',credentials = delegated_credentials, discoveryServiceUrl=DISCOVERY_URI)
 	def getAccounts(self):
 		if self.api != None:
 			response = self.api.accounts().list().execute()
